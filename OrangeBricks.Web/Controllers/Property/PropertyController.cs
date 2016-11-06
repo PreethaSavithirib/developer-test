@@ -24,7 +24,6 @@ namespace OrangeBricks.Web.Controllers.Property
         {
             var builder = new PropertiesViewModelBuilder(_context);
             var viewModel = builder.Build(query);
-
             return View(viewModel);
         }
 
@@ -90,6 +89,46 @@ namespace OrangeBricks.Web.Controllers.Property
             handler.Handle(command);
 
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Get Action to Book house viewing.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [OrangeBricksAuthorize(Roles = "Buyer")]
+        public ActionResult BookingView(int propertyId)
+        {
+            var builder = new PropertyViewModelBuilder(_context);
+            var propertyModel = builder.Build(propertyId);
+
+            return View(propertyModel);
+        }
+
+        /// <summary>
+        /// Method to handle booking view.
+        /// </summary>
+        /// <param name="command">BookingViewCommand</param>
+        /// <returns></returns>
+        [HttpPost]
+        [OrangeBricksAuthorize(Roles ="Buyer")]
+        public ActionResult BookingView(BookingViewCommand command)
+        {
+            var handler = new BookingViewCommandHandler(_context);
+            var result = handler.Handle(command);
+            var newBooking = result.Entity as Booking;
+            if (result.Status)
+                TempData["BookingStatus"] = "Success";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [OrangeBricksAuthorize(Roles ="Buyer")]
+        public ActionResult MyBooking()
+        {
+            var model = new MyBookingModelBuilder(_context);
+            return View(model.Build(User.Identity.GetUserId()));
         }
     }
 }

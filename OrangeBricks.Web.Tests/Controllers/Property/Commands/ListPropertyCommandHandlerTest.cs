@@ -7,18 +7,14 @@ using OrangeBricks.Web.Models;
 namespace OrangeBricks.Web.Tests.Controllers.Property.Commands
 {
     [TestFixture]
-    public class ListPropertyCommandHandlerTest
+    public class ListPropertyCommandHandlerTest :BaseCommandHandlerTest
     {
-        private ListPropertyCommandHandler _handler;
-        private IOrangeBricksContext _context;
-        private IDbSet<Models.Property> _properties;
+        private ListPropertyCommandHandler _handler;        
 
         [SetUp]
         public void SetUp()
         {
-            _context = Substitute.For<IOrangeBricksContext>();
-            _properties = Substitute.For<IDbSet<Models.Property>>();
-            _context.Properties.Returns(_properties);
+            base.SetUp();    
             _handler = new ListPropertyCommandHandler(_context);
         }
 
@@ -31,11 +27,7 @@ namespace OrangeBricks.Web.Tests.Controllers.Property.Commands
                 PropertyId = 1
             };
 
-            var property = new Models.Property
-            {
-                Description = "Test Property",
-                IsListedForSale = false
-            };
+            var property = GetMockProperty(description: "Test Property");            
 
             _properties.Find(1).Returns(property);
 

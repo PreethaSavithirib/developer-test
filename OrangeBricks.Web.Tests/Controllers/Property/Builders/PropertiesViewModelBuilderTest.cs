@@ -21,25 +21,18 @@ namespace OrangeBricks.Web.Tests.Controllers.Property.Builders
     }
 
     [TestFixture]
-    public class PropertiesViewModelBuilderTest
-    {
-        private IOrangeBricksContext _context;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _context = Substitute.For<IOrangeBricksContext>();
-        }
+    public class PropertiesViewModelBuilderTest : BaseModelBuilderTest
+    {      
 
         [Test]
         public void BuildShouldReturnPropertiesWithMatchingStreetNamesWhenSearchTermIsProvided()
         {
             // Arrange
             var builder = new PropertiesViewModelBuilder(_context);
-
+            var offers = new List<Offer>();
             var properties = new List<Models.Property>{
-                new Models.Property{ StreetName = "Smith Street", Description = "", IsListedForSale = true },
-                new Models.Property{ StreetName = "Jones Street", Description = "", IsListedForSale = true}
+                new Models.Property{ StreetName = "Smith Street", Description = "", IsListedForSale = true,Offers = offers },
+                new Models.Property{ StreetName = "Jones Street", Description = "", IsListedForSale = true,Offers = offers}
             };
 
             var mockSet = Substitute.For<IDbSet<Models.Property>>()
@@ -64,12 +57,12 @@ namespace OrangeBricks.Web.Tests.Controllers.Property.Builders
         {
             // Arrange
             var builder = new PropertiesViewModelBuilder(_context);
-
+            var offers = new List<Offer>();
             var properties = new List<Models.Property>{
-                new Models.Property{ StreetName = "", Description = "Great location", IsListedForSale = true },
-                new Models.Property{ StreetName = "", Description = "Town house", IsListedForSale = true }
+                new Models.Property{ StreetName = "", Description = "Great location", IsListedForSale = true,Offers = offers },
+                new Models.Property{ StreetName = "", Description = "Town house", IsListedForSale = true,Offers = offers }
             };
-
+            
             var mockSet = Substitute.For<IDbSet<Models.Property>>()
                 .Initialize(properties.AsQueryable());
 

@@ -1,12 +1,15 @@
 ﻿@model OrangeBricks.Web.Controllers.Property.ViewModels.PropertiesViewModel
-
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Properties For Sale";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Properties For Sale</h2>
-
+@if (TempData["BookingStatus"] == "Success")
+{
+    <p class="alert alert-success">Your Booking view request has been sent to House owner and will be confirmed by house owner.</p>
+}
 @using (Html.BeginForm("Index", "Property", FormMethod.Get, new { @class = "form-horizontal" }))
 {
     <div class="form-group form-group-lg">
@@ -29,7 +32,24 @@
     <h3>@property.StreetName</h3>
     <p>@property.NumberOfBedrooms bedroom @property.PropertyType</p>
     <p>@property.Description</p>
-
+    if (property.Offers != null)
+    {
+        foreach (var offer in property.Offers)
+        {
+            if (offer.Status == "Accepted" && offer.OfferedBy == User.Identity.GetUserId())
+            {
+                <div class="row"><div class="col-md-5 alert-success">your offer Amount £@offer.Amount has been accepted.</div></div>
+            }
+            if (offer.Status == "Rejected" && offer.OfferedBy == User.Identity.GetUserId())
+            {
+                <div class="row"><div class="col-md-5 alert-danger">your offer Amount £@offer.Amount has been rejected.</div></div>
+            }
+        }
+    }
+   
+    <a href="@Url.Action("BookingView", "Property", new {propertyId = property.Id})" class="btn btn-primary">
+        Book Viewing
+    </a>
     <a href="@Url.Action("MakeOffer", "Property", new {id = property.Id})" class="btn btn-primary">
         Make Offer
     </a>

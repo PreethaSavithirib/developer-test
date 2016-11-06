@@ -14,6 +14,7 @@ using OrangeBricks.Web.Models;
 using SimpleInjector;
 using SimpleInjector.Diagnostics;
 using SimpleInjector.Integration.Web.Mvc;
+using System.Data.Entity;
 
 namespace OrangeBricks.Web
 {
@@ -21,6 +22,7 @@ namespace OrangeBricks.Web
     {
         protected void Application_Start()
         {
+            Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

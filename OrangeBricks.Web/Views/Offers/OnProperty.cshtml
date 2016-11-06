@@ -1,4 +1,5 @@
 ﻿@model OrangeBricks.Web.Controllers.Offers.ViewModels.OffersOnPropertyViewModel
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Offers on Your Property";
@@ -32,6 +33,7 @@
             {
                 @Html.Hidden("PropertyId", Model.PropertyId)
                 @Html.Hidden("OfferId", offer.Id)
+                @Html.Hidden("OfferedBy", User.Identity.GetUserId())
                 <p>
                     <input type="submit" class="btn btn-default" value="Accept Offer" />
                 </p>
@@ -40,6 +42,7 @@
             {
                 @Html.Hidden("PropertyId", Model.PropertyId)
                 @Html.Hidden("OfferId", offer.Id)
+                @Html.Hidden("OfferedBy", User.Identity.GetUserId())
                 <p>
                     <input type="submit" class="btn btn-default" value="Reject Offer" />
                 </p>
